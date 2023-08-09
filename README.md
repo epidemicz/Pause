@@ -1,7 +1,7 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S3NKK32)
 
 # ⏸️ Pause
-A simple SPT mod which allows you to pause the game including the raid timer. 
+A simple SPT mod which allows you to pause the game including the raid timer. Press P to pause.
 
 Mostly cobbled together from Kobrakon's [Take-a-Break](https://github.com/kobrakon/TakeABreak) as a learning exercise.
 

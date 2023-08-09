@@ -1,4 +1,4 @@
 .vs
-dependencies
-Pause/bin
-Pause/obj
+source/dependencies
+source/Pause/bin
+source/Pause/obj

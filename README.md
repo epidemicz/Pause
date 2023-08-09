@@ -1,9 +1,17 @@
-# Pause
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S3NKK32)
+
+# ⏸️ Pause
 A simple SPT mod which allows you to pause the game including the raid timer. 
 
 Mostly cobbled together from Kobrakon's [Take-a-Break](https://github.com/kobrakon/TakeABreak) as a learning exercise.
 
 Works with SPT 3.6.0
+
+## Installation
+Unzip the latest release into your SPT plugins folder (spt\BepInEx\plugins).
+
+## Building
+You'd need to manually add the references from the csproj file to the source/dependencies folder which you can copy from your SPT installation.
 
 ## What gets paused
 - You
@@ -31,3 +39,9 @@ Stuff that doesn't pause well at the moment and may not be worth the effort.
 - Pause audio?
   - AudioListener gameObject on DontDestroyOnLoad, set its pause field to true
 - patch GClass714.Update to stop oxygen while ads (prob stam regen too)
+
+## Screenshots
+These don't show much, but you can at least see that the raid timer shows PAUSED when active.
+
+[<img src="images/p1.png">]()
+[<img src="images/p2.png">]()

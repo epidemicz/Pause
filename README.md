@@ -5,7 +5,7 @@ A simple SPT mod which allows you to pause the game including the raid timer. Pr
 
 Mostly cobbled together from Kobrakon's [Take-a-Break](https://github.com/kobrakon/TakeABreak) as a learning exercise.
 
-Works with SPT 3.6.0
+Works with SPT 3.6.0-3.6.1
 
 ## Installation
 Unzip the latest release into your SPT plugins folder (spt\BepInEx\plugins).

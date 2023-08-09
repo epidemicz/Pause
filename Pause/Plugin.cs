@@ -12,13 +12,13 @@ namespace Pause
         const string KeybindSectionName = "Keybinds";
         internal static ConfigEntry<KeyboardShortcut> TogglePause;
         internal static ManualLogSource Log;
+
         void Awake()
         {
             Log = base.Logger;
             TogglePause = Config.Bind(KeybindSectionName, "Toggle Pause", new KeyboardShortcut(KeyCode.P));
             Logger.LogInfo($"PAUSE: Loading");
-            // disabling world tick patch causes time to pass
-            //new WorldTickPatch().Enable();
+            new WorldTickPatch().Enable();
             new OtherWorldTickPatch().Enable();
             new ActiveHealthControllerClassPatch().Enable();
             new GameTimerClassPatch().Enable();

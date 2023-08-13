@@ -3,15 +3,19 @@
 # ⏸️ Pause
 A simple SPT mod which allows you to pause the game including the raid timer. Press P to pause.
 
-Mostly cobbled together from Kobrakon's [Take-a-Break](https://github.com/kobrakon/TakeABreak) as a learning exercise.
+Mostly cobbled together from Kobrakon's [Take A Break](https://github.com/kobrakon/TakeABreak) as a learning exercise.
 
-Works with SPT 3.6.0-3.6.1
+Works with SPT 3.6.0 & 3.6.1
 
 ## Installation
-Unzip the latest release into your SPT plugins folder (spt\BepInEx\plugins).
+Unzip the latest release into your SPT plugins folder ([SPT]\BepInEx\plugins).
 
 ## Building
-You'd need to manually add the references from the csproj file to the source/dependencies folder which you can copy from your SPT installation.
+You'd need to manually add the references from the csproj file to the dependencies folder which you can copy from your SPT installation.
+
+```
+dotnet build
+```
 
 ## What gets paused
 - You
@@ -20,7 +24,6 @@ You'd need to manually add the references from the csproj file to the source/dep
   - Hydration & Energy
   - Stamina
 - AI
-- The world/time of day (I think)
 - The actual game raid timer
 - The fake raid timer you see when you press o
 
@@ -35,7 +38,9 @@ Stuff that doesn't pause well at the moment and may not be worth the effort.
 - You can pause and still move inventory around (shouldn't be able to use anything)
   
 ## Todo & Notes
-- Do a code style pass and random cleanup
+- Look into pausing time of day
+  - GameTimeClass.TimeFactor
+  - GameTimeClass.TimeFactorMod
 - Pause audio?
   - AudioListener gameObject on DontDestroyOnLoad, set its pause field to true
 - patch GClass714.Update to stop oxygen while ads (prob stam regen too)

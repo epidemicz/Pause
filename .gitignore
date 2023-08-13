@@ -1,4 +1,4 @@
 .vs
-source/dependencies
-source/Pause/bin
-source/Pause/obj
+dependencies/*.dll
+source/bin
+source/obj

@@ -1,0 +1,1 @@
+Copy any references needed to this folder from your SPT installation

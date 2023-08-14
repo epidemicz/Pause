@@ -131,16 +131,27 @@ namespace Pause
             // works opposite of GameTimerClass which depends on start date
             var fi2 = typeof(TimerPanel).GetField("dateTime_0", BindingFlags.Instance | BindingFlags.NonPublic);
 
+            // GameTimeClass seems to control the time of day
+            // float_1 is the realTimeSinceStartup at the beginning of the game
+            var fi3 = typeof(GameTimeClass).GetField("float_1", BindingFlags.Instance | BindingFlags.NonPublic);
+
             // get the underlying start date value from GameTimerClass nullable_0 private field
             var startDate = fi1.GetValue(_gameTimerClass) as DateTime?;
+            
             // get the underlying escape date value from TimerPanel dateTime_0 private field
             var escapeDate = fi2.GetValue(_mainTimerPanel) as DateTime?;
+            
+            // get the current realTimeSinceStartup of the GameTimeClass from float_1
+            var realTimeSinceStartup = (float)fi3.GetValue(_gameWorld.GameDateTime);
 
             // add the time spent paused to the underlying start date 
             fi1.SetValue(_gameTimerClass, startDate.Value.Add(timePaused));
 
             // add the time spent paused 
             fi2.SetValue(_mainTimerPanel, escapeDate.Value.Add(timePaused));
+
+            // add the time spend paused (in seconds)
+            fi3.SetValue(_gameWorld.GameDateTime, realTimeSinceStartup + (float)timePaused.TotalSeconds);
         }
 
         bool IsGameReady()

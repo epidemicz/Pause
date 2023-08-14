@@ -26,6 +26,7 @@ dotnet build
 - AI
 - The actual game raid timer
 - The fake raid timer you see when you press o
+- Time of Day
 
 ## Stuff that doesn't really pause well now
 Stuff that doesn't pause well at the moment and may not be worth the effort.

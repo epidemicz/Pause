@@ -8,7 +8,13 @@ Mostly cobbled together from Kobrakon's [Take A Break](https://github.com/kobrak
 Works with SPT 3.6.0 & 3.6.1
 
 ## Installation
-Unzip the latest release into your SPT plugins folder ([SPT]\BepInEx\plugins).
+Download the latest release and unzip the copy of `Epi-Pause.dll` from the version folder according to the SPT-AKI version you are running to your `([SPT]\BepInEx\plugins)` folder.
+
+#### SPT-AKI 3.5.8
+Unzip the `Epi-Pause.dll` found in the 3.5.8 folder to your `([SPT]\BepInEx\plugins)` folder.
+
+#### SPT-AKI 3.6.0 - 3.6.1
+Unzip the `Epi-Pause.dll` found in the 3.6.0-3.6.1 folder to your `([SPT]\BepInEx\plugins)` folder.
 
 ## Building
 You'd need to manually add the references from the csproj file to the dependencies folder which you can copy from your SPT installation.

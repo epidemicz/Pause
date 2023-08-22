@@ -11,10 +11,11 @@ namespace Pause
     public class PauseController : MonoBehaviour
     {
         internal static bool isPaused { get; private set; } = false;
-
+        internal float prevFixedDeltaTime = 0;
+        
         // track time spent paused
-        internal static DateTime? pausedDate { get; private set; } = null;
-        internal static DateTime? unpausedDate { get; private set; } = null;
+        internal DateTime? pausedDate { get; private set; } = null;
+        internal DateTime? unpausedDate { get; private set; } = null;
 
         // used to determine if game is in the right state to be able to pause
         private GameWorld _gameWorld;
@@ -74,10 +75,29 @@ namespace Pause
         private void Pause()
         {
             Time.timeScale = 0f;
+            prevFixedDeltaTime = Time.fixedDeltaTime;
+            Time.fixedDeltaTime = 0f;
+        
             pausedDate = DateTime.UtcNow;
 
             // disable player control
             _gamePlayerOwner.enabled = false;
+
+            var players = _gameWorld.AllPlayersEverExisted;
+
+            // deactivate all players
+            foreach (var player in players) 
+            {
+                if (player.IsYourPlayer)
+                {
+                    continue;
+                }
+
+                Plugin.Log.LogInfo($"Deactivating player: {player.name}");
+
+                //player.enabled = false;
+                player.gameObject.SetActive(false);
+            }
 
             ShowTimer();
         }
@@ -85,10 +105,28 @@ namespace Pause
         private void Unpause()
         {
             Time.timeScale = 1f;
+            Time.fixedDeltaTime = prevFixedDeltaTime;
             unpausedDate = DateTime.UtcNow;
 
             // enable player control
             _gamePlayerOwner.enabled = true;
+
+            // reactivate all players
+            var players = _gameWorld.AllPlayersEverExisted;
+
+            foreach (var player in players) 
+            {
+                if (player.IsYourPlayer) 
+                {
+                    continue;
+                }
+                
+                Plugin.Log.LogInfo($"Reactivating player: {player.name}");
+
+                //player.enabled = true;
+                player.gameObject.SetActive(true);
+            }
+
             StartCoroutine(CoHideTimer());
 
             // get timespan spent paused

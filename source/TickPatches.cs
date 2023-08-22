@@ -53,7 +53,7 @@ namespace Pause
         protected override MethodBase GetTargetMethod() => typeof(ActiveHealthControllerClass).GetMethod("ManualUpdate", BindingFlags.Instance | BindingFlags.Public);
 
         [PatchPrefix]
-        // prevents healath, hydration, energy updates
+        // prevents helath, hydration, energy updates
         static bool Prefix() => !PauseController.isPaused;
     }
 

@@ -10,13 +10,16 @@ namespace Pause
     {
         public static GameObject Hook;
         const string KeybindSectionName = "Keybinds";
+        const string OptionsSectionName = "Options";
         internal static ConfigEntry<KeyboardShortcut> TogglePause;
+        //internal static ConfigEntry<bool> UseAlternatePause;
         internal static ManualLogSource Log;
 
         void Awake()
         {
             Log = base.Logger;
             TogglePause = Config.Bind(KeybindSectionName, "Toggle Pause", new KeyboardShortcut(KeyCode.P));
+            //UseAlternatePause = Config.Bind(OptionsSectionName, "Use Alternate Pause", false);
             Logger.LogInfo($"PAUSE: Loading");
             new WorldTickPatch().Enable();
             new OtherWorldTickPatch().Enable();

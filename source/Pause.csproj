@@ -3,64 +3,74 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>Epi-Pause</AssemblyName>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Optimize>False</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- folder switch -->
+    <DepsPath>..\dependencies\3.6.1</DepsPath>
+    <DepsPath Condition="$(Configuration) == 'TARKOV_358'">..\dependencies\3.5.8</DepsPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="Aki.Common">
-      <HintPath>..\dependencies\Aki.Common.dll</HintPath>
+      <HintPath>$(DepsPath)\Aki.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Aki.Reflection">
-      <HintPath>..\dependencies\Aki.Reflection.dll</HintPath>
+      <HintPath>$(DepsPath)\Aki.Reflection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\dependencies\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(DepsPath)\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\dependencies\BepInEx.dll</HintPath>
+      <HintPath>$(DepsPath)\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Comfort">
       <Private>False</Private>
-      <HintPath>..\dependencies\Comfort.dll</HintPath>
+      <HintPath>$(DepsPath)\Comfort.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\dependencies\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(DepsPath)\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\dependencies\UnityEngine.dll</HintPath>
+      <HintPath>$(DepsPath)\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\dependencies\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(DepsPath)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\dependencies\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(DepsPath)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>..\dependencies\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>$(DepsPath)\UnityEngine.AudioModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>..\dependencies\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(DepsPath)\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>..\dependencies\Sirenix.Serialization.dll</HintPath>
+      <HintPath>$(DepsPath)\Sirenix.Serialization.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule.dll">
-      <HintPath>..\dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(DepsPath)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule.dll">
+      <HintPath>$(DepsPath)\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

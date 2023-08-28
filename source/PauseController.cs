@@ -5,17 +5,19 @@ using Comfort.Common;
 using System;
 using System.Reflection;
 using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
+
 
 namespace Pause
 {
     public class PauseController : MonoBehaviour
     {
-        internal static bool isPaused { get; private set; } = false;
-        internal float prevFixedDeltaTime = 0;
+        public static bool isPaused { get; private set; } = false;
         
         // track time spent paused
-        internal DateTime? pausedDate { get; private set; } = null;
-        internal DateTime? unpausedDate { get; private set; } = null;
+        private DateTime? pausedDate { get; set; } = null;
+        private DateTime? unpausedDate { get; set; } = null;
 
         // used to determine if game is in the right state to be able to pause
         private GameWorld _gameWorld;
@@ -26,6 +28,17 @@ namespace Pause
         private GameTimerClass _gameTimerClass;
         // MainTimerPanel controls on screen raid time
         private MainTimerPanel _mainTimerPanel;
+        
+        private static string[] _targetBones = new string[]
+		{
+			"calf",
+			"foot",
+			"toe",
+			"spine2",
+			"spine3",
+			"forearm",
+			"neck"
+		};
 
         private TimeSpan GetTimePaused()
         {
@@ -72,18 +85,52 @@ namespace Pause
             }
         }
 
+        private IEnumerable<Player> GetPlayers()
+        {
+            #if TARKOV_358
+                return _gameWorld.AllPlayers;
+            #else
+                return _gameWorld.AllPlayersEverExisted;
+            #endif
+        }
+
+        private void SetBonesActive(Player player, bool active)
+        {
+            var rigidBodies = player.PlayerBones.GetComponentsInChildren<Rigidbody>();
+
+            foreach(var r in rigidBodies)
+            {
+                //if (_targetBones.Any(i => r.name.ToLower().Contains(i)))
+                {
+                    Plugin.Log.LogInfo("Found rigidbody: " + r.name);
+                    r.velocity = Vector3.zero;
+                    r.angularVelocity = Vector3.zero;
+                    //r.isKinematic = !active;
+                }
+            }
+
+            var weapRigidBody = player.HandsController?.ControllerGameObject?.GetComponent<Rigidbody>();
+
+            if (weapRigidBody != null) 
+            {
+                Plugin.Log.LogInfo("Found weapon rigid body");
+    
+                weapRigidBody.angularVelocity = Vector3.zero;
+                weapRigidBody.velocity = Vector3.zero;
+            
+                //weapRigidBody.isKinematic = !active;
+            }
+        }
+
         private void Pause()
         {
             Time.timeScale = 0f;
-            prevFixedDeltaTime = Time.fixedDeltaTime;
-            Time.fixedDeltaTime = 0f;
-        
             pausedDate = DateTime.UtcNow;
 
             // disable player control
             _gamePlayerOwner.enabled = false;
 
-            var players = _gameWorld.AllPlayersEverExisted;
+            var players = GetPlayers();
 
             // deactivate all players
             foreach (var player in players) 
@@ -94,9 +141,23 @@ namespace Pause
                 }
 
                 Plugin.Log.LogInfo($"Deactivating player: {player.name}");
-
-                //player.enabled = false;
+                
                 player.gameObject.SetActive(false);
+                // deactivating hands controller game object seems to freeze ragdolls permanently
+                //player.HandsController?.ControllerGameObject?.SetActive(false);
+
+                // if (Plugin.UseAlternatePause.Value)
+                // {
+                //     Plugin.Log.LogInfo("Using alternate pause");
+                    
+                //     player.gameObject.SetActive(false);
+                //     player.HandsController?.ControllerGameObject?.SetActive(false);
+                // }
+                // else 
+                // {
+                //     // get rigid bodies in parent
+                //     SetBonesActive(player, false);
+                // }
             }
 
             ShowTimer();
@@ -105,14 +166,13 @@ namespace Pause
         private void Unpause()
         {
             Time.timeScale = 1f;
-            Time.fixedDeltaTime = prevFixedDeltaTime;
             unpausedDate = DateTime.UtcNow;
 
             // enable player control
             _gamePlayerOwner.enabled = true;
 
             // reactivate all players
-            var players = _gameWorld.AllPlayersEverExisted;
+            var players = GetPlayers();
 
             foreach (var player in players) 
             {
@@ -123,8 +183,21 @@ namespace Pause
                 
                 Plugin.Log.LogInfo($"Reactivating player: {player.name}");
 
-                //player.enabled = true;
-                player.gameObject.SetActive(true);
+                player.gameObject?.SetActive(true);
+                //player.HandsController?.ControllerGameObject?.SetActive(true);
+
+                // if (Plugin.UseAlternatePause.Value)
+                // {
+                //     Plugin.Log.LogInfo("Using alternate pause");
+
+                //     player.gameObject?.SetActive(true);
+                //     player.HandsController?.ControllerGameObject?.SetActive(true);
+                // }
+                // else 
+                // {
+                //     // get rigid bodies in parent
+                //     SetBonesActive(player, true);
+                // }
             }
 
             StartCoroutine(CoHideTimer());

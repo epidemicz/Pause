@@ -105,7 +105,17 @@ namespace Pause
                     Plugin.Log.LogInfo("Found rigidbody: " + r.name);
                     r.velocity = Vector3.zero;
                     r.angularVelocity = Vector3.zero;
+                    // toggling isKinematic may be leading to other
+                    // hit detection problems, or at least it seems like
                     //r.isKinematic = !active;
+                    if (active)
+                    {
+                        r.Sleep();
+                    }
+                    else 
+                    {
+                        r.WakeUp();
+                    }
                 }
             }
 
@@ -117,8 +127,11 @@ namespace Pause
     
                 weapRigidBody.angularVelocity = Vector3.zero;
                 weapRigidBody.velocity = Vector3.zero;
-            
                 //weapRigidBody.isKinematic = !active;
+                // I feel like sleeping the weapon always may be best?
+                // Weird shit is happening
+                weapRigidBody.Sleep();
+
             }
         }
 
@@ -142,7 +155,9 @@ namespace Pause
 
                 Plugin.Log.LogInfo($"Deactivating player: {player.name}");
                 
+                SetBonesActive(player, false);
                 player.gameObject.SetActive(false);
+
                 // deactivating hands controller game object seems to freeze ragdolls permanently
                 //player.HandsController?.ControllerGameObject?.SetActive(false);
 
@@ -183,7 +198,8 @@ namespace Pause
                 
                 Plugin.Log.LogInfo($"Reactivating player: {player.name}");
 
-                player.gameObject?.SetActive(true);
+                player.gameObject.SetActive(true);
+                SetBonesActive(player, true);
                 //player.HandsController?.ControllerGameObject?.SetActive(true);
 
                 // if (Plugin.UseAlternatePause.Value)

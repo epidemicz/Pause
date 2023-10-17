@@ -12,7 +12,7 @@
 
   <PropertyGroup>
     <!-- folder switch -->
-    <DepsPath>..\dependencies\3.6.1</DepsPath>
+    <DepsPath>..\dependencies\3.7.0</DepsPath>
     <DepsPath Condition="$(Configuration) == 'TARKOV_358'">..\dependencies\3.5.8</DepsPath>
   </PropertyGroup>
 

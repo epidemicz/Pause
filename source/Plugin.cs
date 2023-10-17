@@ -5,7 +5,7 @@ using BepInEx.Logging;
 
 namespace Pause
 {
-    [BepInPlugin("com.epi.pause", "PAUSE", "1.0.3")]
+    [BepInPlugin("com.epi.pause", "PAUSE", "1.0.4")]
     public class Plugin : BaseUnityPlugin
     {
         public static GameObject Hook;
@@ -23,7 +23,8 @@ namespace Pause
             Logger.LogInfo($"PAUSE: Loading");
             new WorldTickPatch().Enable();
             new OtherWorldTickPatch().Enable();
-            new ActiveHealthControllerClassPatch().Enable();
+            // seems to be removed in 3.7.0
+            // new ActiveHealthControllerClassPatch().Enable();
             new GameTimerClassPatch().Enable();
             new TimerPanelPatch().Enable();
             Hook = new GameObject("PAUSE");

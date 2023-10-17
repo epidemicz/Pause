@@ -48,14 +48,15 @@ namespace Pause
         }
     }
 
-    public class ActiveHealthControllerClassPatch : ModulePatch 
-    {
-        protected override MethodBase GetTargetMethod() => typeof(ActiveHealthControllerClass).GetMethod("ManualUpdate", BindingFlags.Instance | BindingFlags.Public);
+    // Seems to be removed since 3.7.0
+    // public class ActiveHealthControllerClassPatch : ModulePatch 
+    // {
+    //     protected override MethodBase GetTargetMethod() => typeof(ActiveHealthControllerClass).GetMethod("ManualUpdate", BindingFlags.Instance | BindingFlags.Public);
 
-        [PatchPrefix]
-        // prevents helath, hydration, energy updates
-        static bool Prefix() => !PauseController.isPaused;
-    }
+    //     [PatchPrefix]
+    //     // prevents health, hydration, energy updates
+    //     static bool Prefix() => !PauseController.isPaused;
+    // }
 
     public class GameTimerClassPatch : ModulePatch
     {

@@ -28,7 +28,7 @@ namespace Pause
         private GameTimerClass _gameTimerClass;
         // MainTimerPanel controls on screen raid time
         private MainTimerPanel _mainTimerPanel;
-        
+       
         private static string[] _targetBones = new string[]
 		{
 			"calf",
@@ -102,7 +102,7 @@ namespace Pause
             {
                 //if (_targetBones.Any(i => r.name.ToLower().Contains(i)))
                 {
-                    Plugin.Log.LogInfo("Found rigidbody: " + r.name);
+                    Plugin.Log.LogInfo("Found rigidbody: " + r?.name);
                     r.velocity = Vector3.zero;
                     r.angularVelocity = Vector3.zero;
                     // toggling isKinematic may be leading to other
@@ -156,7 +156,7 @@ namespace Pause
                     continue;
                 }
 
-                Plugin.Log.LogInfo($"Deactivating player: {player.name}");
+                Plugin.Log.LogInfo($"Deactivating player: {player?.name}");
                 
                 SetBonesActive(player, false);
                 player.gameObject.SetActive(false);
@@ -202,7 +202,7 @@ namespace Pause
                     continue;
                 }
                 
-                Plugin.Log.LogInfo($"Reactivating player: {player.name}");
+                Plugin.Log.LogInfo($"Reactivating player: {player?.name}");
 
                 player.gameObject.SetActive(true);
                 SetBonesActive(player, true);
@@ -265,9 +265,8 @@ namespace Pause
             var fi2 = typeof(TimerPanel).GetField("dateTime_0", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // GameTimeClass seems to control the time of day
-            // float_1 is the realTimeSinceStartup at the beginning of the game
-            // todo: changed in 3.7.0
-            // var fi3 = typeof(GameTimeClass).GetField("float_1", BindingFlags.Instance | BindingFlags.NonPublic);
+            // _realTimeSinceStartup is the realTimeSinceStartup at the beginning of the game
+            var fi3 = typeof(GameDateTime).GetField("_realtimeSinceStartup", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // get the underlying start date value from GameTimerClass nullable_0 private field
             var startDate = fi1.GetValue(_gameTimerClass) as DateTime?;
@@ -276,8 +275,7 @@ namespace Pause
             var escapeDate = fi2.GetValue(_mainTimerPanel) as DateTime?;
             
             // get the current realTimeSinceStartup of the GameTimeClass from float_1
-            // todo: changed in 3.7.0
-            // var realTimeSinceStartup = (float)fi3.GetValue(_gameWorld.GameDateTime);
+            var realTimeSinceStartup = (float)fi3.GetValue(_gameWorld.GameDateTime);
 
             // add the time spent paused to the underlying start date 
             fi1.SetValue(_gameTimerClass, startDate.Value.Add(timePaused));
@@ -287,7 +285,7 @@ namespace Pause
 
             // add the time spend paused (in seconds)
             // todo: changed in 3.7.0
-            // fi3.SetValue(_gameWorld.GameDateTime, realTimeSinceStartup + (float)timePaused.TotalSeconds);
+            fi3.SetValue(_gameWorld.GameDateTime, realTimeSinceStartup + (float)timePaused.TotalSeconds);
         }
 
         bool IsGameReady()

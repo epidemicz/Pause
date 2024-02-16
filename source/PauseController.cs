@@ -69,6 +69,9 @@ namespace Pause
 
                     Plugin.Log.LogInfo($"MainTimerPanel found: {_mainTimerPanel != null}");
                     Plugin.Log.LogInfo($"GameTimerClass found: {_gameTimerClass != null}");
+                    Plugin.Log.LogInfo($"Start Time: {_gameTimerClass.StartDateTime.Value.ToString()}");
+                    Plugin.Log.LogInfo($"Escape Time: {_gameTimerClass.EscapeDateTime.Value.ToString()}");
+                    Plugin.Log.LogInfo($"Past Time: {_gameTimerClass.PastTime}");
 
                     if (isPaused)
                     {
@@ -80,6 +83,8 @@ namespace Pause
                     }
 
                     Plugin.Log.LogInfo($"Game paused: [{isPaused}]");
+                    Plugin.Log.LogInfo($"Start Time: {_gameTimerClass.StartDateTime.Value.ToString()}");
+                    Plugin.Log.LogInfo($"Escape Time: {_gameTimerClass.EscapeDateTime.Value.ToString()}");
                     Plugin.Log.LogInfo($"Past Time: {_gameTimerClass.PastTime}");
                 }
             }
@@ -255,7 +260,9 @@ namespace Pause
             // GameTimerClass controls the overall game state
             // If PastTime > SessionTime game ends
             // PastTime is calculated based on nullable_0
-            var fi1 = typeof(GameTimerClass).GetField("nullable_0", BindingFlags.Instance | BindingFlags.NonPublic);
+            var startTime = typeof(GameTimerClass).GetField("nullable_0", BindingFlags.Instance | BindingFlags.NonPublic);
+            var escapeTime = typeof(GameTimerClass).GetField("nullable_1", BindingFlags.Instance | BindingFlags.NonPublic);
+
 
             // MainTimerPanel is the in-game ui clock, which operates separately
             // from the timer in GameTimerClass
@@ -269,7 +276,7 @@ namespace Pause
             var fi3 = typeof(GameDateTime).GetField("_realtimeSinceStartup", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // get the underlying start date value from GameTimerClass nullable_0 private field
-            var startDate = fi1.GetValue(_gameTimerClass) as DateTime?;
+            var startDate = startTime.GetValue(_gameTimerClass) as DateTime?;
             
             // get the underlying escape date value from TimerPanel dateTime_0 private field
             var escapeDate = fi2.GetValue(_mainTimerPanel) as DateTime?;
@@ -278,7 +285,8 @@ namespace Pause
             var realTimeSinceStartup = (float)fi3.GetValue(_gameWorld.GameDateTime);
 
             // add the time spent paused to the underlying start date 
-            fi1.SetValue(_gameTimerClass, startDate.Value.Add(timePaused));
+            startTime.SetValue(_gameTimerClass, startDate.Value.Add(timePaused));
+            escapeTime.SetValue(_gameTimerClass, escapeDate.Value.Add(timePaused));
 
             // add the time spent paused 
             fi2.SetValue(_mainTimerPanel, escapeDate.Value.Add(timePaused));
